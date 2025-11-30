@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { socket } from "../socket";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 
 const Editor = () => {
+  const navigate = useNavigate();
   const { roomId } = useParams();
   const [users, setUsers] = useState([]);
   const [data, setData] = useState("");
@@ -31,12 +32,13 @@ const Editor = () => {
 
       socket.on("PONG", (res) => {
         console.log("Received PONG from server:", res);
-        setData(res.data.data);
-        setUsers(res.data.users);
+        setData(res.data?.data);
+        setUsers(res.data?.users);
       });
 
       socket.on("disconnect", () => {
         console.log("Disconnected to socket server : ");
+        navigate("/create-room", { replace: true });
       });
 
       return () => {
@@ -61,21 +63,37 @@ const Editor = () => {
     setData(value);
   };
 
+  const handleEndSession = () => {
+    socket.emit("END_SESSION", { roomId });
+  };
+
   return (
     <div className="flex min-h-screen">
       <div className="flex-1/6 border-r border-gray-400 min-h-screen ">
         <h2 className="p-4 text-2xl text-center border-b border-gray-400">
           DevSync
         </h2>
-        <div className="p-4">
-          {users.map((user) => (
-            <div
-              key={user}
-              className="px-4 py-2 border-b-[0.5px] border-gray-50"
+        <div className="px-4">
+          <div className="h-[80vh] overflow-y-auto ">
+            {users.map((user) => (
+              <div
+                key={user}
+                className="px-4 py-2 border-b-[0.5px] border-gray-50"
+              >
+                {user}
+              </div>
+            ))}
+          </div>
+
+          <div className="py-4 text-center bottom-0">
+            <button
+              className="text-white hover:border-red-600"
+              style={{ background: "red" }}
+              onClick={handleEndSession}
             >
-              {user}
-            </div>
-          ))}
+              End Session
+            </button>
+          </div>
         </div>
       </div>
       <div className="flex-5/6 p-4">
