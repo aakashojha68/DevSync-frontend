@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BACKEND_URL } from "../constant";
+import { BACKEND_URL, USER_NAME_KEY } from "../constant";
 import { Link, useNavigate } from "react-router";
 
 const CreateRoom = () => {
@@ -12,7 +12,7 @@ const CreateRoom = () => {
   const [loading, setLoading] = useState(false);
 
   const saveNameToLocalStorage = () => {
-    localStorage.setItem("USER_NAME", name);
+    localStorage.setItem(USER_NAME_KEY, name);
   };
 
   const handleCreateRoom = () => {

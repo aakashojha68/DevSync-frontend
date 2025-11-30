@@ -5,6 +5,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import Toast from "./Toast";
 import CopySection from "./CopySection";
+import { USER_NAME_KEY } from "../constant";
 
 const Editor = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const Editor = () => {
       }
 
       const onConnect = () => {
-        const name = localStorage.getItem("USER_NAME");
+        const name = localStorage.getItem(USER_NAME_KEY);
 
         socket.emit("PING", {
           msg: "Hi Server, I'm Client !!",
@@ -45,7 +46,7 @@ const Editor = () => {
         setToastConfig({ visible: true, message: "Session End." });
 
         setTimeout(() => navigate("/create-room", { replace: true }), 1000);
-        localStorage.removeItem("USER_NAME");
+        localStorage.removeItem(USER_NAME_KEY);
       });
 
       socket.on("NEW_USER_JOINED", (data) => {
@@ -59,7 +60,7 @@ const Editor = () => {
           setToastConfig({ visible: true, isError: true, message: data.msg });
 
           setTimeout(() => navigate("/create-room", { replace: true }), 1000);
-          localStorage.removeItem("USER_NAME");
+          localStorage.removeItem(USER_NAME_KEY);
         }
       });
 
