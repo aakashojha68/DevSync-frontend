@@ -17,7 +17,7 @@ const Editor = () => {
     isError: false,
     message: "",
   });
-  const isEditing = useRef(null);
+  const isEditing = useRef(0);
 
   useEffect(() => {
     if (roomId) {
@@ -38,6 +38,8 @@ const Editor = () => {
       socket.on("connect", onConnect);
 
       socket.on("PONG", (res) => {
+        isEditing.current = 0; // making 0 to prevent going in infinite loop
+
         setData(res.data?.data);
         setUsers(res.data?.users);
       });
