@@ -11,6 +11,10 @@ const CreateRoom = () => {
   const [isJoinScreen, setIsJoinScreen] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const saveNameToLocalStorage = () => {
+    localStorage.setItem("USER_NAME", name);
+  };
+
   const handleCreateRoom = () => {
     if (isJoinScreen) {
       setIsJoinScreen(false);
@@ -40,7 +44,7 @@ const CreateRoom = () => {
       .then((res) => {
         const { roomId } = res?.data;
 
-        console.log("Server response:", roomId);
+        saveNameToLocalStorage();
 
         navigate("/room/" + roomId);
       })
@@ -73,6 +77,7 @@ const CreateRoom = () => {
         if (!res.success) {
           setRoomIdError(res.msg);
         } else {
+          saveNameToLocalStorage();
           navigate("/room/" + roomId);
         }
       })
@@ -119,7 +124,7 @@ const CreateRoom = () => {
           </div>
 
           <button
-            className=" px-2 mt-6"
+            className="bg-primary hover:bg-primary-hover px-4 py-2 rounded-lg mt-6 "
             onClick={isJoinScreen ? handleJoinRoom : handleCreateRoom}
           >
             {loading && "Loading..."}
