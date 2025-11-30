@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { socket } from "../socket";
+import CodeMirror from "@uiw/react-codemirror";
+import { javascript } from "@codemirror/lang-javascript";
 
 const Editor = () => {
   const { roomId } = useParams();
   const [users, setUsers] = useState([]);
   const [data, setData] = useState("");
-  //   const [isEditing, setIsEditing] = useState(false);
   const isEditing = useRef(null);
 
   useEffect(() => {
@@ -55,25 +56,36 @@ const Editor = () => {
     }
   }, [data, roomId, isEditing.current]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (value) => {
     isEditing.current = 1;
-    setData(e.target.value);
+    setData(value);
   };
 
   return (
     <div className="flex min-h-screen">
-      <div className="flex-1 border-r border-gray-400 min-h-screen p-4">
-        {users.map((user) => (
-          <div key={user} className="px-4 py-2 border-b border-gray-300">
-            {user}
-          </div>
-        ))}
+      <div className="flex-1/6 border-r border-gray-400 min-h-screen ">
+        <h2 className="p-4 text-2xl text-center border-b border-gray-400">
+          DevSync
+        </h2>
+        <div className="p-4">
+          {users.map((user) => (
+            <div
+              key={user}
+              className="px-4 py-2 border-b-[0.5px] border-gray-50"
+            >
+              {user}
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="flex-3 p-4">
-        <textarea
-          className="border-2"
+      <div className="flex-5/6 p-4">
+        <CodeMirror
+          height="90vh"
           value={data}
+          extensions={[javascript({ jsx: true })]}
           onChange={handleInputChange}
+          autoFocus={true}
+          theme={"dark"}
         />
       </div>
     </div>
