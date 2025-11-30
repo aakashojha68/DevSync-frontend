@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router";
-import CreateRoom from "./components/createRoom";
+import CreateRoom from "./components/CreateRoom";
 import Editor from "./components/Editor";
 
 function App() {
