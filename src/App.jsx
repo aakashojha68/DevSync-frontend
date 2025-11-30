@@ -10,21 +10,6 @@ function App() {
       <Route path="/room/:roomId" element={<Editor />} />
     </Routes>
   );
-
-  // return (
-  //   <>
-  //     <h1>Vite + React</h1>
-  //     <div className="card">
-  //       <button
-  //         onClick={() => {
-  //           pingBackend();
-  //         }}
-  //       >
-  //         Socket io learning
-  //       </button>
-  //     </div>
-  //   </>
-  // );
 }
 
 export default App;
