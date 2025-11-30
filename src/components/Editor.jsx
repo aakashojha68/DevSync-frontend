@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { socket } from "../socket";
 import CodeMirror from "@uiw/react-codemirror";
@@ -17,7 +17,6 @@ const Editor = () => {
     isError: false,
     message: "",
   });
-  const isEditing = useRef(0);
 
   useEffect(() => {
     if (roomId) {
@@ -38,7 +37,7 @@ const Editor = () => {
       socket.on("connect", onConnect);
 
       socket.on("PONG", (res) => {
-        isEditing.current = 0; // making 0 to prevent going in infinite loop
+        // isEditing.current = 0; // making 0 to prevent going in infinite loop
 
         setData(res.data?.data);
         setUsers(res.data?.users);
@@ -77,15 +76,16 @@ const Editor = () => {
     }
   }, [roomId]);
 
-  useEffect(() => {
-    if (roomId && isEditing.current) {
-      socket.emit("CODE_CHANGED", { data, roomId });
-    }
-  }, [data, roomId, isEditing.current]);
+  // useEffect(() => {
+  //   if (roomId && isEditing.current) {
+  //     socket.emit("CODE_CHANGED", { data, roomId });
+  //   }
+  // }, [data, roomId, isEditing.current]);
 
   const handleInputChange = (value) => {
-    isEditing.current = 1;
+    // isEditing.current = true;
     setData(value);
+    if (roomId) socket.emit("CODE_CHANGED", { data: value, roomId });
   };
 
   const handleEndSession = () => {
